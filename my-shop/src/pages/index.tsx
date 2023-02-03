@@ -1,3 +1,5 @@
+import ProductList from "@/components/ProductList";
+
 export default function Home() {
   console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
   return (
@@ -6,6 +8,7 @@ export default function Home() {
         <div className="m-2">abc</div>
         <div>aabc</div>
       </div>
+      <ProductList />
     </>
   );
 }
