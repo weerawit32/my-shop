@@ -5,10 +5,10 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const useAuthenService = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const signUp = async ({
     email,
     password,
@@ -17,7 +17,9 @@ const useAuthenService = () => {
     password: string;
   }) => {
     try {
+      console.log("test", email, password);
       await createUserWithEmailAndPassword(auth, email, password);
+      await signIn({ email, password });
     } catch (e) {}
   };
 
@@ -29,8 +31,8 @@ const useAuthenService = () => {
     password: string;
   }) => {
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("result", result);
+      await signInWithEmailAndPassword(auth, email, password);
+      // router.push("/");
     } catch (e) {
       console.log("error", e);
     }
@@ -38,6 +40,7 @@ const useAuthenService = () => {
 
   const logout = async () => {
     try {
+      console.log("logout");
       await signOut(auth);
     } catch (error) {
       console.log("error", error);
