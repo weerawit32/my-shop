@@ -23,6 +23,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unSubscibe = onAuthStateChanged(auth, (currenUser) => {
       if (currenUser) {
+        console.log("cur", currenUser);
         setUser({
           uid: currenUser?.uid,
           name: currenUser?.displayName,

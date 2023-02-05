@@ -12,7 +12,7 @@ const MiniCart = () => {
     <div className="relative">
       <CartIcon />
       {quantity > 0 && (
-        <span className="absolute top-5 -right-4 bg-white text-sm text-black px-2 py-1 rounded-full">
+        <span className="absolute top-4 -right-2 bg-black text-sm text-white border border-white px-2 py-1 rounded-full">
           {quantity}
         </span>
       )}

@@ -32,7 +32,7 @@ const useAuthenService = () => {
   }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // router.push("/");
+      router.push("/");
     } catch (e) {
       console.log("error", e);
     }
@@ -40,7 +40,6 @@ const useAuthenService = () => {
 
   const logout = async () => {
     try {
-      console.log("logout");
       await signOut(auth);
     } catch (error) {
       console.log("error", error);

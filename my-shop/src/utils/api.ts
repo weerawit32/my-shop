@@ -25,6 +25,5 @@ export const request = async (method: string, url: string, params: object) => {
     .catch((error) => {
       console.log(error);
     });
-
   return res;
 };

@@ -2,8 +2,8 @@ const CartIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="40"
-      height="40"
+      width="35"
+      height="35"
       fill="white"
       className="bi bi-cart"
       viewBox="0 0 16 16"

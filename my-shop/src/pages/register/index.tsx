@@ -22,9 +22,9 @@ const Register = () => {
     console.log("Failed:", errorInfo);
   };
 
-  if (uid) {
-    return <></>;
-  }
+  // if (uid) {
+  //   return <></>;
+  // }
 
   return (
     <div className="w-[500px] mx-auto">

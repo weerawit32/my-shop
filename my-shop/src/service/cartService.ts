@@ -7,7 +7,7 @@ import { cartContext } from "@/context/cartContext";
 const useCartService = () => {
   const { uid } = useContext(authContext);
   const { cart, setCart } = useContext(cartContext);
-  console.log("cart", cart);
+  // console.log("cart", cart);
   const cartRef = collection(db, "cart");
 
   const _setCart = async (data: any) => {

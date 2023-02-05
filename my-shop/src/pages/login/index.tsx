@@ -30,9 +30,9 @@ const Login = () => {
     reset();
   };
 
-  if (uid) {
-    return <></>;
-  }
+  // if (uid) {
+  //   return <></>;
+  // }
 
   return (
     <div className="h-auto w-full flex flex-col justify-center items-center space-y-5">
@@ -41,15 +41,18 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Username</label>
           <input {...register("email")} />
-          <p style={{ height: "10px" }}>{errors?.email?.message}</p>
+          <p className="pb-6" style={{ height: "10px" }}>
+            {errors?.email?.message}
+          </p>
           <label>Password</label>
           <input type="password" {...register("password")} />
-          <p style={{ height: "10px" }}>{errors?.password?.message}</p>
+          <p className="pb-6" style={{ height: "10px" }}>
+            {errors?.password?.message}
+          </p>
 
           <input type="submit" />
         </form>
       </div>
-      {/* <button onClick={() => router.push("/register")}>Sign Up</button> */}
       <Button onClick={() => router.push("/register")}>Sign Up</Button>
     </div>
   );

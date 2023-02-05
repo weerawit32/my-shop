@@ -6,27 +6,34 @@ import MinusIcon from "@/components/Icons/Minus";
 import PlusIcon from "@/components/Icons/PlusIcon";
 import useCartService from "@/service/cartService";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import useProductDetail from "@/service/productDetailService";
+import _isEmpty from "lodash/isEmpty";
+import { Button } from "antd";
 
 const ProductDatail = () => {
   const router = useRouter();
   const id = router.query.id;
-  const item = mockData.results.find((item) => item.articles[0].code === id);
+  // const item = mockData.results.find((item) => item.articles[0].code === id);
+  const { item, loading, error } = useProductDetail(id);
   const { addToCart, cart, removeItemFromCart } = useCartService();
   const [quantity, setQuantity] = useState(1);
 
   const _onAddTocart = () => {
     addToCart({
       id,
-      price: item?.price.value,
+      price: item?.whitePrice?.price,
       name: item?.name,
-      iamge_url: item?.images[0].url,
       quantity,
     });
   };
+
+  if (loading || error) {
+    return <></>;
+  }
   return (
     <div className="flex">
       <div className="basis-1/2">
-        <Carousel autoPlay>
+        {/* <Carousel autoPlay>
           {item?.galleryImages.map((img: any, index: number) => {
             return (
               <div key={`${item.name}-img-${index}`}>
@@ -37,15 +44,15 @@ const ProductDatail = () => {
               </div>
             );
           })}
-        </Carousel>
+        </Carousel> */}
       </div>
-      <div className="basis-1/2">
+      <div className="basis-1/2 p-5">
         <h2 className="text-2xl font-bold mt-8">{item?.name}</h2>
-        <p className="text-lg font-medium mt-2">{item?.price.formattedValue}</p>
+        <p className="text-lg font-medium mt-2">$ {item?.whitePrice?.price}</p>
 
-        <div className="flex">
+        <div className="flex my-6">
           <button
-            style={{ border: "black solid", height: "30px" }}
+            className="border border-2 border-gray-200 h-[30px] p-1 text-center"
             disabled={quantity === 1 || quantity === 0}
             onClick={() => setQuantity((prevQty) => prevQty - 1)}
           >
@@ -66,22 +73,25 @@ const ProductDatail = () => {
             }
           ></input>
           <button
-            style={{ border: "black solid", height: "30px" }}
+            className="border border-2 border-gray-200 h-[30px] p-1 "
             onClick={() => setQuantity((prevQty) => prevQty + 1)}
           >
             <PlusIcon />
           </button>
         </div>
-        <button
-          style={{ border: " dashed", height: "30px" }}
+        {/* <button
+          // style={{ border: " dashed", height: "30px" }}
           onClick={_onAddTocart}
-          className="mb-6"
+          className="my-6 border border-2 border-gray-200 h-[30px] p-1 flex items-center"
         >
           Add to cart
-        </button>
+        </button> */}
+        <Button className="my-6 h-[30px]" onClick={_onAddTocart}>
+          Add to cart
+        </Button>
+        <div className="pb-6">{item?.description}</div>
 
         <Cart cart={cart} />
-        {/* <div>{item?.description}</div> */}
       </div>
     </div>
   );
@@ -90,12 +100,24 @@ const ProductDatail = () => {
 export default ProductDatail;
 
 const Cart = ({ cart }: any) => {
+  const subtotal = Math.floor(
+    cart?.reduce((curr: number, prev: any) => {
+      return curr + prev.price * prev.quantity;
+    }, 0)
+  );
   return (
     <>
-      <div className="w-[600px] min-h-[400px] border-4 border-indigo-500/100 flex flex-col">
-        {cart?.map((item: any, index: number) => {
-          return <CartItem key={`cart-item-${index}`} cartItem={item} />;
-        })}
+      <div className="w-[600px] h-[400px] shadow-xl flex flex-col p-3">
+        <div className="h-[400px] overflow-y-auto">
+          {cart?.map((item: any, index: number) => {
+            return <CartItem key={`cart-item-${index}`} cartItem={item} />;
+          })}
+        </div>
+        {!_isEmpty(cart) ? (
+          <div className="text-gray-700 font-medium text-end m-2">
+            Total: $ {subtotal}
+          </div>
+        ) : null}
       </div>
     </>
   );
@@ -110,19 +132,22 @@ const CartItem = ({ cartItem }: any) => {
     <div className="flex items-center justify-between p-2">
       <div className="flex items-center">
         <div className="w-8 h-8 bg-gray-300 rounded-full mr-2"></div>
-        <div className="text-gray-700 font-medium">{name}</div>
+        <div>
+          <div className="text-gray-700 font-medium">{name}</div>
+          <div className="text-gray-700 font-medium">$ {price}</div>
+        </div>
       </div>
-      <div className="text-gray-700 font-medium">{price}</div>
-      <div className="text-gray-700 font-medium">
-        <div className="flex">
+      <div className="text-gray-700 font-medium my-2">
+        <div className="flex items-center">
           <button
-            style={{ border: "black solid", height: "30px" }}
+            className="my-6 border border-2 border-gray-200 h-[30px] p-1 text-center"
             onClick={() => decreaseItemQuantity(id)}
           >
             <MinusIcon />
           </button>
           <input
             style={{
+              margin: "0px 5px",
               width: "60px",
               height: "30px",
               textAlign: "center",
@@ -134,14 +159,16 @@ const CartItem = ({ cartItem }: any) => {
             readOnly
           ></input>
           <button
-            style={{ border: "black solid", height: "30px" }}
+            className="my-6 border border-2 border-gray-200 h-[30px] p-1 text-center"
             onClick={() => addItemQuantity(id)}
           >
             <PlusIcon />
           </button>
+          <button className="ml-4" onClick={() => removeItemFromCart(id)}>
+            x
+          </button>
         </div>
       </div>
-      <button onClick={() => removeItemFromCart(id)}>x</button>
       {/* <div className="text-gray-700 font-medium">
         Total Quantity: totalQuantity
       </div>
