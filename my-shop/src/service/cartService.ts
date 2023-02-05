@@ -9,7 +9,6 @@ const useCartService = () => {
   const { cart, setCart } = useContext(cartContext);
   console.log("cart", cart);
   const cartRef = collection(db, "cart");
-  const [items, setItems] = useState<any[]>([]);
 
   const _setCart = async (data: any) => {
     if (!uid) return;

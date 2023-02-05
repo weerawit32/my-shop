@@ -1,8 +1,11 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAuthenService from "../../service/authenService";
-import { loginSchema, LoginFormData } from "../../utils/yup";
-import * as yup from "yup";
+import { loginSchema } from "../../utils/yup";
+import { useRouter } from "next/router";
+import { Button } from "antd";
+import { useContext } from "react";
+import { authContext } from "@/context/authContext";
 
 interface IFormInput {
   email: string;
@@ -10,22 +13,30 @@ interface IFormInput {
 }
 
 const Login = () => {
+  const { uid } = useContext(authContext);
+  const router = useRouter();
   const { signIn } = useAuthenService();
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({
     resolver: yupResolver(loginSchema),
   });
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log("data", data);
-    signIn(data);
+    await signIn(data);
+    reset();
   };
+
+  if (uid) {
+    return <></>;
+  }
 
   return (
     <div className="h-auto w-full flex flex-col justify-center items-center space-y-5">
-      <h1>Welcome to my sh</h1>
+      <h1>Welcome to my shop</h1>
       <div className="w-[500px] bg-gray-100  px-[80px] py-[80px] my-[50px]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Username</label>
@@ -38,7 +49,8 @@ const Login = () => {
           <input type="submit" />
         </form>
       </div>
-      <button>Sign Up</button>
+      {/* <button onClick={() => router.push("/register")}>Sign Up</button> */}
+      <Button onClick={() => router.push("/register")}>Sign Up</Button>
     </div>
   );
 };
